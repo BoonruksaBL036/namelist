@@ -1,0 +1,182 @@
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f8f0f7;
+  /* Soft pink background */
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: #6a1b9a;
+  /* Dark pink */
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #d81b60;
+  /* Strong red-pink header */
+  color: white;
+  border-radius: 8px;
+}
+
+/* Course Information */
+.details {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.details h2 {
+  margin-bottom: 10px;
+}
+
+.details p {
+  margin: 5px 0;
+}
+
+/* Form Container */
+.form-container {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-container label {
+  font-weight: bold;
+  color: #d81b60;
+  /* Red-pink for labels */
+}
+
+.form-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #d81b60;
+  /* Red border */
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-container button {
+  padding: 10px 20px;
+  background-color: #d81b60;
+  /* Red-pink button */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.form-container button:hover {
+  background-color: #c2185b;
+  /* Darker pink when hovering */
+}
+
+.form-container button:disabled {
+  background-color: #f8f0f7;
+  cursor: not-allowed;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #d81b60;
+  /* Red-pink header */
+  color: white;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+td button {
+  padding: 6px 12px;
+  margin: 2px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+td button.edit {
+  background-color: #8e24aa;
+  /* Dark pink for Edit button */
+  color: white;
+}
+
+td button.delete {
+  background-color: #f44336;
+  /* Red for Delete button */
+  color: white;
+}
+
+td button:hover {
+  opacity: 0.8;
+}
+
+.form-container input {
+  width: 100%;
+}
+
+.form-container button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+table {
+  font-size: 14px;
+}
+
+th,
+td {
+  padding: 8px;
+}
+
+.student-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #d81b60;
+  /* เส้นขอบสีชมพู */
+}
+
+.student-img.default {
+  background-color: black;
+  /* กำหนดพื้นหลังเป็นสีดำ */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}

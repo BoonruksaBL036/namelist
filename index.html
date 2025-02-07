@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student CRUD - พีชคณิตเชิงเส้นและโครงสร้างข้อมูล</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class=" container">
+        <header>
+            <h1>มหาวิทยาลัยราชภัฏนครปฐม</h1>
+            <p>ระบบบริการการศึกษา - ภาคการศึกษา 2/2567</p>
+        </header>
+
+        <div class="details">
+            <h2>Course Information</h2>
+            <p><strong>รหัสวิชา:</strong> 7152802</p>
+            <p><strong>ชื่อวิชา:</strong> พีชคณิตเชิงเส้นและโครงสร้างข้อมูล</p>
+            <p><strong>หน่วยกิต:</strong> 3(2-2-5)</p>
+            <p><strong>กลุ่มเรียน:</strong> 66/53</p>
+            <p><strong>ผู้สอน:</strong> ผู้ช่วยศาสตราจารย์ สมเกียรติ ช่อเหมือน</p>
+            <h3>Class Schedule</h3>
+            <p><strong>วัน:</strong> ศ.</p>
+            <p><strong>เวลา:</strong> 13:30-17:30</p>
+            <p><strong>ห้องเรียน:</strong> C408</p>
+            <p><strong>ตารางสอบ:</strong> -</p>
+        </div>
+
+        <div class="form-container">
+            <h2>Manage Students</h2>
+            <form id="studentForm">
+                <label for="studentImage">Student Image:</label>
+                <input type="file" id="studentImage" accept="image/*">
+                <label for="studentId">Student ID:</label>
+                <input type="text" id="studentId" required placeholder="Enter Student ID">
+                <label for="studentName">Student Name:</label>
+                <input type="text" id="studentName" required placeholder="Enter Student Name">
+                <button type="submit">Add Student</button>
+                <button type="button" id="updateBtn" style="display:none;">Update Student</button>
+            </form>
+        </div>
+
+        <h2>Student List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <!-- Student data will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let students = [
+            { id: "664259005", name: "นางสาวณัฐกานต์ จำรัสภูมิ" },
+            { id: "664259006", name: "นางสาวณัฐ์สุดา รงทอง" },
+            { id: "664259007", name: "นายธนกฤต จันทร์หลง" },
+            { id: "664259009", name: "นางสาวนับทอง สู่พิพักดิ์" },
+            { id: "664259010", name: "นายนิติพล สมบัติ" },
+            { id: "664259012", name: "นายภูมิภัทร บุญประมา" },
+            { id: "664259015", name: "นายวิศรุต แซ่เล้า" },
+            { id: "664259019", name: "นายธนกร นนท์ช้าง" },
+            { id: "664259020", name: "นายธนวัฒน์ ศรีแสง" },
+            { id: "664259027", name: "นายศุภวิชญ์ สิทธิสูงเนิน" },
+            { id: "664259032", name: "นายชุติพงษ์ เสือบางพระ" },
+            { id: "664259033", name: "นายสรรพวัต พัดทอง" },
+            { id: "664259036", name: "นางสาวบุญรักษา วินานนท์" }
+        ];
+
+        const tableBody = document.getElementById('studentTableBody');
+        const studentForm = document.getElementById('studentForm');
+        const studentIdInput = document.getElementById('studentId');
+        const studentNameInput = document.getElementById('studentName');
+        const updateBtn = document.getElementById('updateBtn');
+        const studentImageInput = document.getElementById('studentImage');
+        let editingIndex = -1;
+
+        // โหลดข้อมูลจาก LocalStorage เมื่อเปิดหน้าเว็บ
+        document.addEventListener("DOMContentLoaded", () => {
+            const storedStudents = localStorage.getItem("students");
+            if (storedStudents) {
+                students = JSON.parse(storedStudents);
+            }
+            renderStudentTable();
+        });
+
+        // ฟังก์ชันบันทึกข้อมูลลง LocalStorage
+        function saveToLocalStorage() {
+            localStorage.setItem("students", JSON.stringify(students));
+        }
+
+        // Function to render the student list
+        function renderStudentTable() {
+            tableBody.innerHTML = '';
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                const cellPhoto = document.createElement('td');
+                const cellId = document.createElement('td');
+                const cellName = document.createElement('td');
+                const cellActions = document.createElement('td');
+
+                cellId.textContent = student.id;
+                cellName.textContent = student.name;
+
+                const img = document.createElement('img');
+                img.src = student.photo || 'https://via.placeholder.com/50/000000/000000?text=+';
+                img.classList.add('student-img');
+                if (!student.photo) {
+                    img.classList.add('default');
+                }
+                cellPhoto.appendChild(img);
+
+                // Create Action buttons (Edit, Delete)
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.classList.add('edit');
+                editBtn.onclick = () => editStudent(index);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.classList.add('delete');
+                deleteBtn.onclick = () => deleteStudent(index);
+
+                cellActions.appendChild(editBtn);
+                cellActions.appendChild(deleteBtn);
+
+                row.appendChild(cellPhoto);
+                row.appendChild(cellId);
+                row.appendChild(cellName);
+                row.appendChild(cellActions);
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Add a new student
+        studentForm.onsubmit = function (event) {
+            event.preventDefault();
+            const id = studentIdInput.value.trim();
+            const name = studentNameInput.value.trim();
+            const file = studentImageInput.files[0];
+
+            if (editingIndex === -1) {
+                // Add new student
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        students.push({ id, name, photo: e.target.result });
+                        renderStudentTable();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    students.push({ id, name, photo: '' });
+                    renderStudentTable();
+                }
+            } else {
+                // Update existing student
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        students[editingIndex] = { id, name, photo: e.target.result };
+                        finalizeUpdate();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    students[editingIndex].id = id;
+                    students[editingIndex].name = name;
+                    finalizeUpdate();
+                }
+            }
+        };
+
+        // Function to finalize the update
+        function finalizeUpdate() {
+            editingIndex = -1;
+            updateBtn.style.display = 'none';
+            studentForm.querySelector('button[type="submit"]').style.display = 'inline-block';
+            studentIdInput.value = '';
+            studentNameInput.value = '';
+            studentImageInput.value = '';
+            renderStudentTable();
+        }
+
+        // Function to edit a student
+        function editStudent(index) {
+            const student = students[index];
+            studentIdInput.value = student.id;
+            studentNameInput.value = student.name;
+            editingIndex = index;
+
+            updateBtn.style.display = 'inline-block';
+            studentForm.querySelector('button[type="submit"]').style.display = 'none';
+        }
+
+        // Function to handle update button click
+        updateBtn.onclick = function () {
+            studentForm.onsubmit(new Event('submit'));
+        };
+
+        function saveStudent(id, name, photo) {
+            if (editingIndex === -1) {
+                students.push({ id, name, photo });
+            } else {
+                students[editingIndex] = { id, name, photo };
+                editingIndex = -1;
+                updateBtn.style.display = 'none';
+            }
+
+            studentIdInput.value = '';
+            studentNameInput.value = '';
+            studentImageInput.value = '';
+            renderStudentTable();
+        }
+
+        // Edit a student
+        function editStudent(index) {
+            const student = students[index];
+            studentIdInput.value = student.id;
+            studentNameInput.value = student.name;
+            editingIndex = index;
+            updateBtn.style.display = 'inline-block';
+        }
+
+        // Delete a student
+        // Delete a student with confirmation
+        function deleteStudent(index) {
+            const student = students[index];
+            const confirmDelete = confirm(`คุณต้องการลบ ${student.name} (รหัส ${student.id}) ออกจากระบบหรือไม่?`);
+
+            if (confirmDelete) {
+                students.splice(index, 1);
+                renderStudentTable();
+            }
+        }
+
+        // Initial render of student list
+        renderStudentTable();
+    </script>
+
+</body>
+
+</html>
